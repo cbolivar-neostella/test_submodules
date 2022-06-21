@@ -1,0 +1,4 @@
+[submodule "web-app-backend-template"]
+	path = web-app-backend-template
+	url = https://github.com/Neostella/web-app-backend-template
+	branch = dev
