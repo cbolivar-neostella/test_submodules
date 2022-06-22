@@ -2,3 +2,7 @@
 	path = web-app-backend-template
 	url = https://github.com/Neostella/web-app-backend-template
 	branch = master
+[submodule "project-vulcan-frontend"]
+	path = project-vulcan-frontend
+	url = https://github.com/Neostella/project-vulcan-frontend
+	branch = main
