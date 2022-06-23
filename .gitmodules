@@ -6,3 +6,7 @@
 	path = project-vulcan-frontend
 	url = https://github.com/Neostella/project-vulcan-frontend
 	branch = main
+[submodule "core"]
+	path = core
+	url = https://github.com/cbolivar-neostella/core
+	branch = main
