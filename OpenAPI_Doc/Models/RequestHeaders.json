@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Authorization",
+        "required": "true",
+        "type": "string",
+        "description": "Enter access token"
+    },
+    {
+        "name": "Content-Type",
+        "required": "true",
+        "type": "string",
+        "description": "application/json"
+    },
+    {
+        "name": "App-Key",
+        "required": "false",
+        "type": "string",
+        "description": "You must provide an application key or a tenant key unless you are using the aws.cognito.signin.user.admin scope"
+    },
+    {
+        "name": "Tenant-Key",
+        "required": "false",
+        "type": "string",
+        "description": "You must provide an application key or a tenant key unless you are using the aws.cognito.signin.user.admin scope"
+    },
+    {
+        "name": "tenant_id",
+        "required": "false",
+        "type": "string",
+        "description": "You must specify a tenant id if you are using an application key"
+    }
+]

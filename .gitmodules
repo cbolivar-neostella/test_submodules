@@ -1,4 +1,4 @@
-[submodule "core"]
-	path = core
+[submodule "src/core"]
+	path = src/core
 	url = https://github.com/cbolivar-neostella/core
-	branch = dev
+	branch = main

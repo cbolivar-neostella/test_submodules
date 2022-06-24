@@ -1,0 +1,61 @@
+service: submodules
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-python-requirements
+  - serverless-aws-documentation
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+
+  region: ${file(./variables.json):AWSREGION}
+  stage: ${file(./variables.json):AWSSTAGE}
+  profile: ${file(./variables.json):PROFILE}
+
+  memorySize: 1024
+  timeout: 30
+
+  environment: ${file(./src/core/init.yml):environment}
+
+  httpApi: ${file(./src/core/init.yml):httpApi}
+
+  iam: ${file(./src/core/init.yml):iam}
+
+  layers:
+    - arn:aws:lambda:us-east-2:651364325517:layer:CoralogixRequests:2
+    - Ref: PythonRequirementsLambdaLayer
+
+functions:
+  - ${file(./src/core/Controllers/UserController/serverless.yml):functions}
+  - ${file(./src/core/Controllers/RoleController/serverless.yml):functions}
+  - ${file(./src/core/Controllers/TenantController/serverless.yml):functions}
+  - ${file(./src/core/Controllers/TranslationController/serverless.yml):functions}
+  - ${file(./src/core/TenantResources/tenant_neostella.yml):functions}
+
+resources:
+  # Core Resources
+  - ${file(./src/core/init.yml):resources}
+
+  # Cognito AppKeys
+  - ${file(./src/core/cognito_app_keys.yml):resources}
+
+  # Cognito Neostella
+  - ${file(./src/core/TenantResources/tenant_neostella.yml):resources}
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    layer:
+      name: ${self:service}-${self:provider.stage}-python-libraries
+      description: Layer containing the python libraries necessary for project ${self:service}
+      compatibleRuntimes:
+        - python3.8
+  documentation: ${file(./OpenAPI_Doc/serverless.doc.yml):documentation}
