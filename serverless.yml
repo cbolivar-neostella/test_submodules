@@ -23,11 +23,51 @@ provider:
   memorySize: 1024
   timeout: 30
 
-  environment: ${file(./src/core/init.yml):environment}
+  environment:
+    SERVICE_NAME: ${self:service}-${self:provider.stage}
+    REGION_NAME: ${self:provider.region}
+    DATABASE_NAME: ${self:resources.0.Resources.MasterUserDB.Properties.DatabaseName}
+    DB_CLUSTER_ARN: arn:aws:rds:${self:provider.region}:${aws:accountId}:cluster:${self:resources.0.Resources.MasterUserDB.Properties.DBClusterIdentifier}
+    CORALOGIX_SECRET: ${self:resources.0.Resources.CoralogixKey.Properties.Name}
+    DB_CREDENTIALS_SECRETS_STORE_ARN:
+      Ref: DatabaseKeys
+    APPKEY_SECRET_ARN:
+      Ref: ApplicationKey
 
-  httpApi: ${file(./src/core/init.yml):httpApi}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - "*"
+      allowedHeaders:
+        - Access-Control-Allow-Headers
+        - Origin
+        - Accept
+        - X-Requested-With
+        - Content-Type
+        - Access-Control-Request-Method
+        - Access-Control-Request-Headers
+        - Authorization
+      allowedMethods:
+        - GET
+        - HEAD
+        - OPTIONS
+        - POST
+        - PUT
+        - DELETE
+      allowCredentials: true
+      exposedResponseHeaders:
+        - Special-Response-Header
+      maxAge: 6000 # In seconds
 
-  iam: ${file(./src/core/init.yml):iam}
+  iam:
+    role:
+      managedPolicies:
+        - arn:aws:iam::aws:policy/AmazonRDSDataFullAccess
+        - arn:aws:iam::aws:policy/AmazonCognitoPowerUser
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/IAMFullAccess
 
   layers:
     - arn:aws:lambda:us-east-2:651364325517:layer:CoralogixRequests:2
