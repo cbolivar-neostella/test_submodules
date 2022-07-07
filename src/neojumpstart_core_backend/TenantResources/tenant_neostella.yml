@@ -1,0 +1,150 @@
+# Replace neostella for the specific name of the tenant in all the file
+functions:
+  tenant_init_neostella:
+    handler: src/neojumpstart_core_backend/Controllers/TenantController/tenant_init.lambda_handler
+    timeout: 120
+    environment:
+      RESOURCE_METHOD: neostella_init
+      USER_POOL_ID:
+        Ref: MasterUserPoolneostella
+      IDENTITY_POOL_ID:
+        Ref: MasterIdentityPoolneostella
+      USER_POOL_CLIENT_ID:
+        Ref: MasterUserPoolClientneostella
+      USER_EMAIL: carlos.bolivar@neostella.com
+      USER_FIRST_NAME: Carlos
+      USER_LAST_NAME: Bolivar
+      TENANT_NAME: neostella
+
+resources:
+  Resources:
+    # IAM Resources
+    CognitoAuthRoleneostella:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Federated: cognito-identity.amazonaws.com
+              Action:
+                - "sts:AssumeRoleWithWebIdentity"
+              Condition:
+                StringEquals:
+                  cognito-identity.amazonaws.com:aud:
+                    Ref: MasterIdentityPoolneostella
+                ForAnyValue:StringLike:
+                  cognito-identity.amazonaws.com:amr: authenticated
+        Policies:
+          - PolicyName: ${self:service}-${self:provider.stage}-cognitoauth-neostella
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - mobileanalytics:PutEvents
+                    - cognito-sync:*
+                    - cognito-identity:*
+                  Resource:
+                    - "*"
+        RoleName: ${self:service}-${self:provider.stage}-cognito_auth_role-neostella
+
+    CognitoUnauthRoleneostella:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Federated: cognito-identity.amazonaws.com
+              Action:
+                - "sts:AssumeRoleWithWebIdentity"
+              Condition:
+                StringEquals:
+                  cognito-identity.amazonaws.com:aud:
+                    Ref: MasterIdentityPoolneostella
+                ForAnyValue:StringLike:
+                  cognito-identity.amazonaws.com:amr: unauthenticated
+        Policies:
+          - PolicyName: ${self:service}-${self:provider.stage}-cognitounauth-neostella
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - mobileanalytics:PutEvents
+                    - cognito-sync:*
+                  Resource:
+                    - "*"
+        RoleName: ${self:service}-${self:provider.stage}-cognito_unauth_role-neostella
+
+    # Cognito Resources
+    MasterUserPoolneostella:
+      Type: "AWS::Cognito::UserPool"
+      Properties:
+        AccountRecoverySetting:
+          RecoveryMechanisms:
+            - Name: verified_email
+              Priority: 1
+        AdminCreateUserConfig:
+          AllowAdminCreateUserOnly: True
+          InviteMessageTemplate:
+            EmailMessage: Your username is {username} and temporary password is {####}
+            EmailSubject: ${self:service} - neostella - Your temporary password
+            SMSMessage: Your username is {username} and temporary password is {####}
+        UsernameAttributes:
+          - email
+        UsernameConfiguration:
+          CaseSensitive: True
+        UserPoolName: ${self:service}-${self:provider.stage}-MasterUserPool-neostella
+
+    MasterUserPoolClientneostella:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        AllowedOAuthFlows:
+          - code
+          - implicit
+        AllowedOAuthScopes:
+          - email
+          - openid
+        CallbackURLs:
+          - https://www.google.com
+        AllowedOAuthFlowsUserPoolClient: True
+        ClientName: ${self:service}-${self:provider.stage}-masteruserpoolclient-neostella
+        EnableTokenRevocation: True
+        ExplicitAuthFlows:
+          - ALLOW_CUSTOM_AUTH
+          - ALLOW_USER_SRP_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+        GenerateSecret: False
+        PreventUserExistenceErrors: ENABLED
+        SupportedIdentityProviders:
+          - COGNITO
+        UserPoolId:
+          Ref: MasterUserPoolneostella
+
+    MasterIdentityPoolneostella:
+      Type: AWS::Cognito::IdentityPool
+      Properties:
+        AllowClassicFlow: False
+        AllowUnauthenticatedIdentities: False
+        CognitoIdentityProviders:
+          - ClientId:
+              Ref: MasterUserPoolClientneostella
+            ProviderName:
+              Fn::GetAtt: ["MasterUserPoolneostella", "ProviderName"]
+            ServerSideTokenCheck: False
+        IdentityPoolName: ${self:service}-${self:provider.stage}-masteridentitypool-neostella
+
+    AuthRoleAttachmentneostella:
+      Type: AWS::Cognito::IdentityPoolRoleAttachment
+      Properties:
+        IdentityPoolId:
+          Ref: MasterIdentityPoolneostella
+        Roles:
+          authenticated:
+            "Fn::GetAtt": [CognitoAuthRoleneostella, Arn]
+          unauthenticated:
+            "Fn::GetAtt": [CognitoUnauthRoleneostella, Arn]

@@ -1,0 +1,53 @@
+functions:
+  RotateSecret:
+    handler: src/neojumpstart_core_backend/Controllers/TenantController/RotateSecret.lambda_handler
+    environment:
+      RESOURCE_METHOD: RotateSecret
+
+  # Tenants
+  TenantsGet:
+    handler: src/neojumpstart_core_backend/Controllers/TenantController/TenantsGet.lambda_handler
+    environment:
+      RESOURCE_METHOD: TenantsGet
+    events:
+      - http:
+          path: tenants
+          cors: True
+          method: get
+          documentation: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/serverless.doc.yml):functions.TenantsGet}
+
+  TenantKeyGenerationPost:
+    handler: src/neojumpstart_core_backend/Controllers/TenantController/TenantKeyGenerationPost.lambda_handler
+    environment:
+      RESOURCE_METHOD: TenantKeyGenerationPost
+    events:
+      - http:
+          path: tenant-key
+          cors: True
+          method: post
+          documentation: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/serverless.doc.yml):functions.TimeZonesGet}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            scopes:
+              - aws.cognito.signin.user.admin
+              - apiauthidentifier/json.read
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  TenantKeyGenerationGet:
+    handler: src/neojumpstart_core_backend/Controllers/TenantController/TenantKeyGenerationGet.lambda_handler
+    environment:
+      RESOURCE_METHOD: TenantKeyGenerationGet
+    events:
+      - http:
+          path: tenant-key
+          cors: True
+          method: get
+          #documentation: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/serverless.doc.yml):functions.TenantKeyGenerationGet}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            scopes:
+              - aws.cognito.signin.user.admin
+              - apiauthidentifier/json.read
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

@@ -1,0 +1,31 @@
+{
+    "type": "object",
+    "required": [
+        "cognito_user_id"
+    ],
+    "properties": {
+        "cognito_user_id": {
+            "type": "string",
+            "description": "UUID of the user"
+        },
+        "first_name": {
+            "type": "string",
+            "description": "New first name of the user"
+        },
+        "last_name": {
+            "type": "string",
+            "description": "New last name of the user"
+        },
+        "is_active": {
+            "type": "boolean",
+            "description": "New status of the user"
+        },
+        "roles": {
+            "type": "array",
+            "description": "An array containing the UUIDs of the old and new roles to be assigned to the user",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

@@ -29,6 +29,7 @@ provider:
     DATABASE_NAME: ${self:resources.0.Resources.MasterUserDB.Properties.DatabaseName}
     DB_CLUSTER_ARN: arn:aws:rds:${self:provider.region}:${aws:accountId}:cluster:${self:resources.0.Resources.MasterUserDB.Properties.DBClusterIdentifier}
     CORALOGIX_SECRET: ${self:resources.0.Resources.CoralogixKey.Properties.Name}
+    SNS_ARN: arn:aws:sns:${self:provider.region}:${aws:accountId}:${self:resources.3.Resources.EventTopic.Properties.TopicName}
     DB_CREDENTIALS_SECRETS_STORE_ARN:
       Ref: DatabaseKeys
     APPKEY_SECRET_ARN:
@@ -68,27 +69,37 @@ provider:
         - arn:aws:iam::aws:policy/SecretsManagerReadWrite
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
         - arn:aws:iam::aws:policy/IAMFullAccess
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
 
   layers:
     - arn:aws:lambda:us-east-2:651364325517:layer:CoralogixRequests:2
     - Ref: PythonRequirementsLambdaLayer
 
 functions:
-  - ${file(./src/core/Controllers/UserController/serverless.yml):functions}
-  - ${file(./src/core/Controllers/RoleController/serverless.yml):functions}
-  - ${file(./src/core/Controllers/TenantController/serverless.yml):functions}
-  - ${file(./src/core/Controllers/TranslationController/serverless.yml):functions}
-  - ${file(./src/core/TenantResources/tenant_neostella.yml):functions}
+  # neojumpstart_core_backend
+  - ${file(./src/neojumpstart_core_backend/Controllers/UserController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_core_backend/Controllers/RoleController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_core_backend/Controllers/TenantController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_core_backend/Controllers/TranslationController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_core_backend/TenantResources/tenant_neostella.yml):functions}
+
+  # Events
+  - ${file(./src/neojumpstart_events_backend/Controllers/WebhookController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_events_backend/Controllers/AuditController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_events_backend/init.yml):functions}
 
 resources:
-  # Core Resources
-  - ${file(./src/core/init.yml):resources}
+  # neojumpstart_core_backend Resources
+  - ${file(./src/neojumpstart_core_backend/init.yml):resources}
 
   # Cognito AppKeys
-  - ${file(./src/core/cognito_app_keys.yml):resources}
+  - ${file(./src/neojumpstart_core_backend/cognito_app_keys.yml):resources}
 
   # Cognito Neostella
-  - ${file(./src/core/TenantResources/tenant_neostella.yml):resources}
+  - ${file(./src/neojumpstart_core_backend/TenantResources/tenant_neostella.yml):resources}
+
+  # Events
+  - ${file(./src/neojumpstart_events_backend/init.yml):resources}
 
 custom:
   pythonRequirements:

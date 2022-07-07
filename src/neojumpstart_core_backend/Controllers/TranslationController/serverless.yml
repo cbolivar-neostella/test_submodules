@@ -1,0 +1,54 @@
+functions:
+  # Translations
+  TranslationsGet:
+    handler: src/neojumpstart_core_backend/Controllers/TranslationController/TranslationsGet.lambda_handler
+    environment:
+      RESOURCE_METHOD: TranslationsGet
+      TRANSLATIONS_BUCKET:
+        Ref: TranslationBucket
+    events:
+      - http:
+          path: translations
+          cors: True
+          method: get
+          documentation: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/serverless.doc.yml):functions.TranslationsGet}
+
+  TranslationsPost:
+    handler: src/neojumpstart_core_backend/Controllers/TranslationController/TranslationsPost.lambda_handler
+    environment:
+      RESOURCE_METHOD: TranslationsPost
+      TRANSLATIONS_BUCKET:
+        Ref: TranslationBucket
+    events:
+      - http:
+          path: translations
+          cors: True
+          method: post
+          documentation: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/serverless.doc.yml):functions.TranslationsPost}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            scopes:
+              - aws.cognito.signin.user.admin
+              - apiauthidentifier/json.read
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  TranslationsDelete:
+    handler: src/neojumpstart_core_backend/Controllers/TranslationController/TranslationsDelete.lambda_handler
+    environment:
+      RESOURCE_METHOD: TranslationsDelete
+      TRANSLATIONS_BUCKET:
+        Ref: TranslationBucket
+    events:
+      - http:
+          path: translations
+          cors: True
+          method: delete
+          documentation: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/serverless.doc.yml):functions.TranslationsDelete}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            scopes:
+              - aws.cognito.signin.user.admin
+              - apiauthidentifier/json.read
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

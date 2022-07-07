@@ -1,0 +1,30 @@
+{
+    "type": "object",
+    "required": [
+        "email",
+        "first_name",
+        "last_name",
+        "roles"
+    ],
+    "properties": {
+        "email": {
+            "type": "string",
+            "description": "Email address for the new user to be created"
+        },
+        "first_name": {
+            "type": "string",
+            "description": "First name for the new user to be created"
+        },
+        "last_name": {
+            "type": "string",
+            "description": "Last name for the new user to be created"
+        },
+        "roles": {
+            "type": "array",
+            "description": "An array containing the UUIDs of the roles to be assigned to the new user on creation",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

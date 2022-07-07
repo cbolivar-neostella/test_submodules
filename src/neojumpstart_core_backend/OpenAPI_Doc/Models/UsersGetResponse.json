@@ -1,0 +1,66 @@
+{
+    "type": "object",
+    "properties": {
+        "count" : {
+            "type": "integer",
+            "description": "Number of records without the pagination"
+        },
+        "records": {
+            "type": "array",
+            "description": "An array the data of users",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "cognito_user_id": {
+                        "type": "string",
+                        "description": "UUID of the user"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email of the user"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "description": "First name of the user"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "description": "Last name of the user"
+                    },
+                    "full_name": {
+                        "type": "string",
+                        "description": "Name of the user"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "description": "enabled/disabled"
+                    },
+                    "created_by": {
+                        "type": "string",
+                        "description": "Unique identifier for the user who created the user"
+                    },
+                    "updated_by": {
+                        "type": "string",
+                        "description": "Unique identifier for the last user who updated the user"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "Creation date of the user in %Y-%m-%d %H:%M:%S format"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "description": "Last modification date of the user in %Y-%m-%d %H:%M:%S format"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "description": "An array containing the UUIDs of the roles assigned to the user",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+}

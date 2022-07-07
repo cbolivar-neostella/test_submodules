@@ -1,0 +1,150 @@
+# Replace *tenant_name* for the specific name of the tenant in all the file
+functions:
+  tenant_init_*tenant_name*:
+    handler: src/neojumpstart_core_backend/Controllers/TenantController/tenant_init.lambda_handler
+    timeout: 120
+    environment:
+      RESOURCE_METHOD: *tenant_name*_init
+      USER_POOL_ID:
+        Ref: MasterUserPool*tenant_name*
+      IDENTITY_POOL_ID:
+        Ref: MasterIdentityPool*tenant_name*
+      USER_POOL_CLIENT_ID:
+        Ref: MasterUserPoolClient*tenant_name*
+      USER_EMAIL: alejandro.valencia@neostella.com
+      USER_FIRST_NAME: Alejandro
+      USER_LAST_NAME: Valencia
+      TENANT_NAME: *tenant_name*
+
+resources:
+  Resources:
+    # IAM Resources
+    CognitoAuthRole*tenant_name*:
+      Type: AWS::IAM::Role
+      Properties: 
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Federated: cognito-identity.amazonaws.com
+              Action:
+                - 'sts:AssumeRoleWithWebIdentity'
+              Condition:
+                StringEquals:
+                  cognito-identity.amazonaws.com:aud: 
+                    Ref: MasterIdentityPool*tenant_name*
+                ForAnyValue:StringLike: 
+                  cognito-identity.amazonaws.com:amr: authenticated
+        Policies:
+          - PolicyName: ${self:service}-${self:provider.stage}-cognitoauth-*tenant_name*
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement: 
+                - Effect: Allow
+                  Action: 
+                    - mobileanalytics:PutEvents
+                    - cognito-sync:*
+                    - cognito-identity:*
+                  Resource:
+                    - '*'
+        RoleName: ${self:service}-${self:provider.stage}-cognito_auth_role-*tenant_name*
+
+    CognitoUnauthRole*tenant_name*:
+      Type: AWS::IAM::Role
+      Properties: 
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Federated: cognito-identity.amazonaws.com
+              Action:
+                - 'sts:AssumeRoleWithWebIdentity'
+              Condition:
+                StringEquals:
+                  cognito-identity.amazonaws.com:aud: 
+                    Ref: MasterIdentityPool*tenant_name*
+                ForAnyValue:StringLike: 
+                  cognito-identity.amazonaws.com:amr: unauthenticated
+        Policies:
+          - PolicyName: ${self:service}-${self:provider.stage}-cognitounauth-*tenant_name*
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement: 
+                - Effect: Allow
+                  Action: 
+                    - mobileanalytics:PutEvents
+                    - cognito-sync:*
+                  Resource:
+                    - '*'
+        RoleName: ${self:service}-${self:provider.stage}-cognito_unauth_role-*tenant_name*
+
+    # Cognito Resources
+    MasterUserPool*tenant_name*:
+      Type: 'AWS::Cognito::UserPool'
+      Properties: 
+        AccountRecoverySetting: 
+          RecoveryMechanisms: 
+            - Name: verified_email
+              Priority: 1
+        AdminCreateUserConfig: 
+          AllowAdminCreateUserOnly: True 
+          InviteMessageTemplate: 
+            EmailMessage: Your username is {username} and temporary password is {####}
+            EmailSubject: ${self:service} - *tenant_name* - Your temporary password
+            SMSMessage: Your username is {username} and temporary password is {####}
+        UsernameAttributes:
+          - email
+        UsernameConfiguration:
+          CaseSensitive: True
+        UserPoolName: ${self:service}-${self:provider.stage}-MasterUserPool-*tenant_name*
+
+    MasterUserPoolClient*tenant_name*:
+      Type: AWS::Cognito::UserPoolClient
+      Properties: 
+        AllowedOAuthFlows: 
+          - code
+          - implicit 
+        AllowedOAuthScopes:
+          - email
+          - openid
+        CallbackURLs:
+          - https://www.google.com
+        AllowedOAuthFlowsUserPoolClient: True
+        ClientName: ${self:service}-${self:provider.stage}-masteruserpoolclient-*tenant_name*
+        EnableTokenRevocation: True
+        ExplicitAuthFlows: 
+          - ALLOW_CUSTOM_AUTH
+          - ALLOW_USER_SRP_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+        GenerateSecret: False
+        PreventUserExistenceErrors: ENABLED
+        SupportedIdentityProviders:
+          - COGNITO
+        UserPoolId: 
+          Ref: MasterUserPool*tenant_name*
+
+    MasterIdentityPool*tenant_name*:
+      Type: AWS::Cognito::IdentityPool
+      Properties: 
+        AllowClassicFlow: False
+        AllowUnauthenticatedIdentities: False
+        CognitoIdentityProviders: 
+          - ClientId: 
+              Ref: MasterUserPoolClient*tenant_name*
+            ProviderName:
+              Fn::GetAtt: [ "MasterUserPool*tenant_name*", "ProviderName" ]
+            ServerSideTokenCheck: False
+        IdentityPoolName: ${self:service}-${self:provider.stage}-masteridentitypool-*tenant_name*
+
+    AuthRoleAttachment*tenant_name*:
+      Type: AWS::Cognito::IdentityPoolRoleAttachment
+      Properties: 
+        IdentityPoolId:
+          Ref: MasterIdentityPool*tenant_name*
+        Roles:
+          authenticated: 
+            "Fn::GetAtt": [CognitoAuthRole*tenant_name*, Arn]
+          unauthenticated: 
+            "Fn::GetAtt": [CognitoUnauthRole*tenant_name*, Arn]

@@ -1,0 +1,67 @@
+{
+    "type": "array",
+    "description": "An array containing the roles data and its permissions",
+    "items": {
+        "type": "object",
+        "properties": {
+            "role_id" : {
+                "type": "string",
+                "description": "UUID of role"
+            },
+            "role" : {
+                "type": "string",
+                "description": "name of role"
+            },
+            "type" : {
+                "type": "string",
+                "description": "type of role"
+            },
+            "is_active" : {
+                "type": "boolean",
+                "description": "status of role"
+            },
+            "role_permissions":  {
+                "type": "array",
+                "description": "An array containing the UUIDs of the roles to be assigned to the new user on creation",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "module":{
+                            "type":"object",
+                            "properties":{
+                                "component":{
+                                    "type":"object",
+                                    "properties":{
+                                        "subcomponent":{
+                                            "type":"object",
+                                            "properties":{
+                                                "can_view":{
+                                                    "type":"boolean",
+                                                    "description": "can read permission for that component"
+                                                },
+                                                "can_create":{
+                                                    "type":"boolean",
+                                                    "description": "can create permission for that component"
+                                                },
+                                                "can_update":{
+                                                    "type":"boolean",
+                                                    "description": "can update permission for that component"
+                                                },
+                                                "can_delete":{
+                                                    "type":"boolean",
+                                                    "description": "can delete permission for that component"
+                                                }
+                                            }  
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
+            
+        }
+    }
+}

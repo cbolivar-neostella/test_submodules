@@ -1,0 +1,321 @@
+models:
+  - name: "UsersPostRequest"
+    description: "Model for creating a new user"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/UsersPostRequest.json)}
+  - name: "UsersPutRequest"
+    description: "Model for updating an user"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/UsersPutRequest.json)}
+  - name: "UsersGetResponse"
+    description: "Model for get user data response"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/UsersGetResponse.json)}
+  - name: "RolesGetResponse"
+    description: "Model for get role data response"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/RolesGetResponse.json)}
+  - name: "RolesPostRequest"
+    description: "Model for creating a new role"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/RolesPostRequest.json)}
+  - name: "RolesPutRequest"
+    description: "Model for updating a role"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/RolesPutRequest.json)}
+  - name: "TranslationsPostRequest"
+    description: "Model for creating a new custom translation"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TranslationsPostRequest.json)}
+  - name: "TranslationsGetResponse"
+    description: "Model for the response of the translations"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TranslationsGetResponse.json)}
+  - name: "TranslationsDeleteRequest"
+    description: "Model for deleting a custom translation"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TranslationsDeleteRequest.json)}
+  - name: "TenantsGetResponse"
+    description: "Response received when requesting tenant information"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TenantsGetResponse.json)}
+  - name: "TimeZonesGetResponse"
+    description: "Model for get time zones data response."
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TimeZonesGetResponse.json)}
+  - name: "ResendPasswordPostRequest"
+    description: "Model for resend password to a user"
+    contentType: "application/json"
+    schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/ResendPasswordPostRequest.json)}
+
+functions:
+  UsersPut:
+    summary: "Update User"
+    description: "Update an user"
+    tags:
+      - "Users"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    requestModels:
+      "application/json": "UsersPutRequest"
+    methodResponses:
+      - statusCode: "200"
+        description: "User Updated"
+        responseModels:
+          "application/json": "ObjectEditionResponse"
+      - statusCode: "403"
+        description: "Permission denied"
+        responseModels:
+          "application/json": "PermissionDeniedResponse"
+      - statusCode: "500"
+        description: "Unexpected error"
+        responseModels:
+          "application/json": "ErrorResponse"
+
+  UsersPost:
+    summary: "Create User"
+    description: "Creates a new user and sends email with temporary password"
+    tags:
+      - "Users"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    requestModels:
+      "application/json": "UsersPostRequest"
+    methodResponses:
+      - statusCode: "200"
+        description: "User Created"
+        responseModels:
+          "application/json": "ObjectCreationResponse"
+      - statusCode: "403"
+        description: "Permission denied"
+        responseModels:
+          "application/json": "PermissionDeniedResponse"
+      - statusCode: "500"
+        description: "Unexpected error"
+        responseModels:
+          "application/json": "ErrorResponse"
+
+  UsersGet:
+    summary: "Get User(s) DATA"
+    description: "Get List of Users Data"
+    tags:
+      - "Users"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    queryParams:
+      - name: "fields"
+        description: "fields wanted in the returned data"
+      - name: "cognito_user_id"
+        description: "UUID of the user"
+      - name: "email"
+        description: "Email of the user"
+      - name: "first_name"
+        description: "First name of the user"
+      - name: "last_name"
+        description: "Last name of the user"
+      - name: "full_name"
+        description: "Name of the user"
+      - name: "is_active"
+        description: "enabled/disabled"
+      - name: "limit"
+        description: "Limit of records to be returned"
+      - name: "page"
+        description: "number of page for pagination"
+    methodResponses:
+      - statusCode: "200"
+        description: "User data returned"
+        responseModels:
+          "application/json": "UsersGetResponse"
+      - statusCode: "403"
+        description: "Permission denied"
+        responseModels:
+          "application/json": "PermissionDeniedResponse"
+      - statusCode: "500"
+        description: "Unexpected error"
+        responseModels:
+          "application/json": "ErrorResponse"
+
+  RolesGet:
+    summary: "Get Role(s) or components DATA"
+    description: "Get List of roles or components Data"
+    tags:
+      - "Roles"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    queryParams:
+      - name: "data"
+        description: "roles for roles names, permissions for components, roles-permissions for roles and its permissions"
+      - name: "role"
+        description: "name of the role"
+      - name: "is_active"
+        description: "True or False"
+    methodResponses:
+      - statusCode: "200"
+        description: "Roles data returned"
+        responseModels:
+          "application/json": "RolesGetResponse"
+      - statusCode: "403"
+        description: "Permission denied"
+        responseModels:
+          "application/json": "PermissionDeniedResponse"
+      - statusCode: "500"
+        description: "Unexpected error"
+        responseModels:
+          "application/json": "ErrorResponse"
+
+  RolesPost:
+    summary: "Create Role"
+    description: "Creates a new role"
+    tags:
+      - "Roles"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    requestModels:
+      "application/json": "RolesPostRequest"
+    methodResponses:
+      - statusCode: "200"
+        description: "Role created"
+        responseModels:
+          "application/json": "ObjectCreationResponse"
+      - statusCode: "403"
+        description: "Permission denied"
+        responseModels:
+          "application/json": "PermissionDeniedResponse"
+      - statusCode: "500"
+        description: "Unexpected error"
+        responseModels:
+          "application/json": "ErrorResponse"
+
+  RolesPut:
+    summary: "Update Role"
+    description: "Updates a role"
+    tags:
+      - "Roles"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    requestModels:
+      "application/json": "RolesPutRequest"
+    methodResponses:
+      - statusCode: "200"
+        description: "Role Updated"
+        responseModels:
+          "application/json": "ObjectEditionResponse"
+      - statusCode: "403"
+        description: "Permission denied"
+        responseModels:
+          "application/json": "PermissionDeniedResponse"
+      - statusCode: "500"
+        description: "Unexpected error"
+        responseModels:
+          "application/json": "ErrorResponse"
+
+    # Translations
+  TranslationsPost:
+    summary: "Create or update a custom translation"
+    description: "Create or update a new custom translation for an specific language "
+    tags:
+      - "Translations"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    requestModels:
+      "application/json": "TranslationsPostRequest"
+    methodResponses:
+      - statusCode: "200"
+        description: "Custom translation added"
+        responseModels:
+          "application/json": "ObjectCreationResponse"
+      - statusCode: "403"
+        description: "Permission denied"
+        responseModels:
+          "application/json": "PermissionDeniedResponse"
+      - statusCode: "500"
+        description: "Unexpected error"
+        responseModels:
+          "application/json": "ErrorResponse"
+
+  TranslationsGet:
+    summary: "Obtains a json file with translations"
+    description: "Obtains a json file with all translations for an specific tenant"
+    tags:
+      - "Translations"
+    queryParams:
+      - name: "tenant_id"
+        description: "Tenant id where the user wants to get the translations"
+    methodResponses:
+      - statusCode: "200"
+        description: "contains a json file with the translations"
+        responseModels:
+          "application/json": "TranslationsGetResponse"
+
+  TranslationsDelete:
+    summary: "Deletes a custom translation"
+    description: "Deletes a custom translation for an specific language "
+    tags:
+      - "Translations"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    requestModels:
+      "application/json": "TranslationsDeleteRequest"
+    methodResponses:
+      - statusCode: "200"
+        description: "Custom translation deleted"
+        responseModels:
+          "application/json": "ObjectDeleteResponse"
+
+  # Tenants
+  TenantsGet:
+    summary: "Get Tenant Data"
+    description: "Retrieves the information for a tenant by providing its name"
+    tags:
+      - "Tenants"
+    queryParams:
+      - name: "tenant_name"
+        description: "Name of the tenant"
+        type: "string"
+        required: "true"
+    methodResponses:
+      - statusCode: "200"
+        description: "Tenant data"
+        responseModels:
+          "application/json": "TenantsGetResponse"
+
+  TimeZonesGet:
+    summary: "Get data of timezones"
+    description: "Get List of timezones"
+    tags:
+      - "TimeZones"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    queryParams:
+      - name: "name"
+        description: "Name of the time zone to be searched"
+      - name: "limit"
+        description: "Limit of records to be returned"
+      - name: "page"
+        description: "number of page for pagination"
+    methodResponses:
+      - statusCode: "200"
+        description: "Get time zones success"
+        responseModels:
+          "application/json": "TimeZonesGetResponse"
+      - statusCode: "403"
+        description: "Permission denied"
+        responseModels:
+          "application/json": "PermissionDeniedResponse"
+      - statusCode: "500"
+        description: "Unexpected error"
+        responseModels:
+          "application/json": "ErrorResponse"
+
+  ResendPasswordPost:
+    summary: "Resend password"
+    description: "Resend password to a user that the user status is FORCE_CHANGE_PASSWORD"
+    tags:
+      - "Webhook"
+    requestHeaders: ${file(./OpenAPI_Doc/Models/RequestHeaders.json)}
+    requestModels:
+      "application/json": "ResendPasswordPostRequest"
+    methodResponses:
+      - statusCode: "200"
+        description: "User password resended"
+        responseModels:
+          "application/json": "ObjectCreationResponse"
+      - statusCode: "403"
+        description: "Permission denied"
+        responseModels:
+          "application/json": "PermissionDeniedResponse"
+      - statusCode: "500"
+        description: "Unexpected error"
+        responseModels:
+          "application/json": "ErrorResponse"
