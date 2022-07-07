@@ -1,0 +1,45 @@
+{
+    "type": "object",
+    "properties": {
+        "statusCode": {
+            "type": "integer",
+            "description": "Status code of the response (200)"
+        },
+        "body": {
+            "type": "object",
+            "description": "Body of the response",
+            "properties": {
+                "result": {
+                    "type": "string",
+                    "description": "Message confirming the delete of the object"
+                },
+                "UUID": {
+                    "type": "string",
+                    "description": "Unique ID of the execution"
+                }
+            }
+        },
+        "headers": {
+            "type": "object",
+            "description": "Object containing CORS Headers",
+            "properties": {
+                "Access-Control-Allow-Origin": {
+                    "type": "string",
+                    "description": "*"
+                },
+                "Access-Control-Allow-Credentials": {
+                    "type": "string",
+                    "description": "true"
+                },
+                "Access-Control-Allow-Methods": {
+                    "type": "string",
+                    "description": "GET,HEAD,OPTIONS,POST,PUT"
+                },
+                "Access-Control-Allow-Headers": {
+                    "type": "string",
+                    "description": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+                }
+            }
+        }
+    }
+}

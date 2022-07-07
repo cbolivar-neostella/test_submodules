@@ -1,4 +1,9 @@
-[submodule "core"]
-	path = core
-	url = https://github.com/cbolivar-neostella/core
-	branch = qa
+[submodule "src/neojumpstart_events_backend"]
+	path = src/neojumpstart_events_backend
+	url = https://github.com/Neostella/neojumpstart_events_backend
+	branch = dev
+[submodule "src/neojumpstart_core_backend"]
+	path = src/neojumpstart_core_backend
+	url = https://github.com/Neostella/neojumpstart_core_backend
+	branch = dev
+

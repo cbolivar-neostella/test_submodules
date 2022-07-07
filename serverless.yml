@@ -1,0 +1,112 @@
+service: submodules
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-python-requirements
+  - serverless-aws-documentation
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+
+  region: ${file(./variables.json):AWSREGION}
+  stage: ${file(./variables.json):AWSSTAGE}
+  profile: ${file(./variables.json):PROFILE}
+
+  memorySize: 1024
+  timeout: 30
+
+  environment:
+    SERVICE_NAME: ${self:service}-${self:provider.stage}
+    REGION_NAME: ${self:provider.region}
+    DATABASE_NAME: ${self:resources.0.Resources.MasterUserDB.Properties.DatabaseName}
+    DB_CLUSTER_ARN: arn:aws:rds:${self:provider.region}:${aws:accountId}:cluster:${self:resources.0.Resources.MasterUserDB.Properties.DBClusterIdentifier}
+    CORALOGIX_SECRET: ${self:resources.0.Resources.CoralogixKey.Properties.Name}
+    SNS_ARN: arn:aws:sns:${self:provider.region}:${aws:accountId}:${self:resources.3.Resources.EventTopic.Properties.TopicName}
+    DB_CREDENTIALS_SECRETS_STORE_ARN:
+      Ref: DatabaseKeys
+    APPKEY_SECRET_ARN:
+      Ref: ApplicationKey
+
+  httpApi:
+    cors:
+      allowedOrigins:
+        - "*"
+      allowedHeaders:
+        - Access-Control-Allow-Headers
+        - Origin
+        - Accept
+        - X-Requested-With
+        - Content-Type
+        - Access-Control-Request-Method
+        - Access-Control-Request-Headers
+        - Authorization
+      allowedMethods:
+        - GET
+        - HEAD
+        - OPTIONS
+        - POST
+        - PUT
+        - DELETE
+      allowCredentials: true
+      exposedResponseHeaders:
+        - Special-Response-Header
+      maxAge: 6000 # In seconds
+
+  iam:
+    role:
+      managedPolicies:
+        - arn:aws:iam::aws:policy/AmazonRDSDataFullAccess
+        - arn:aws:iam::aws:policy/AmazonCognitoPowerUser
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/IAMFullAccess
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+
+  layers:
+    - arn:aws:lambda:us-east-2:651364325517:layer:CoralogixRequests:2
+    - Ref: PythonRequirementsLambdaLayer
+
+functions:
+  # neojumpstart_core_backend
+  - ${file(./src/neojumpstart_core_backend/Controllers/UserController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_core_backend/Controllers/RoleController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_core_backend/Controllers/TenantController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_core_backend/Controllers/TranslationController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_core_backend/TenantResources/tenant_neostella.yml):functions}
+
+  # Events
+  - ${file(./src/neojumpstart_events_backend/Controllers/WebhookController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_events_backend/Controllers/AuditController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_events_backend/init.yml):functions}
+
+resources:
+  # neojumpstart_core_backend Resources
+  - ${file(./src/neojumpstart_core_backend/init.yml):resources}
+
+  # Cognito AppKeys
+  - ${file(./src/neojumpstart_core_backend/cognito_app_keys.yml):resources}
+
+  # Cognito Neostella
+  - ${file(./src/neojumpstart_core_backend/TenantResources/tenant_neostella.yml):resources}
+
+  # Events
+  - ${file(./src/neojumpstart_events_backend/init.yml):resources}
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    layer:
+      name: ${self:service}-${self:provider.stage}-python-libraries
+      description: Layer containing the python libraries necessary for project ${self:service}
+      compatibleRuntimes:
+        - python3.8
+  documentation: ${file(./OpenAPI_Doc/serverless.doc.yml):documentation}

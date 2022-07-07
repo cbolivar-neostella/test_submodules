@@ -1,0 +1,102 @@
+documentation:
+  info:
+    version: "0.0.1"
+    title: "Submodules API"
+    description: "This is the API for the Submodules template"
+  models:
+    - name: "UsersPostRequest"
+      description: "Model for creating a new user"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/UsersPostRequest.json)}
+    - name: "UsersPutRequest"
+      description: "Model for updating an user"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/UsersPutRequest.json)}
+    - name: "UsersGetResponse"
+      description: "Model for get user data response"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/UsersGetResponse.json)}
+    - name: "RolesGetResponse"
+      description: "Model for get role data response"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/RolesGetResponse.json)}
+    - name: "RolesPostRequest"
+      description: "Model for creating a new role"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/RolesPostRequest.json)}
+    - name: "RolesPutRequest"
+      description: "Model for updating a role"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/RolesPutRequest.json)}
+    - name: "TranslationsPostRequest"
+      description: "Model for creating a new custom translation"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TranslationsPostRequest.json)}
+    - name: "TranslationsGetResponse"
+      description: "Model for the response of the translations"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TranslationsGetResponse.json)}
+    - name: "TranslationsDeleteRequest"
+      description: "Model for deleting a custom translation"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TranslationsDeleteRequest.json)}
+    - name: "TenantsGetResponse"
+      description: "Response received when requesting tenant information"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TenantsGetResponse.json)}
+    - name: "TimeZonesGetResponse"
+      description: "Model for get time zones data response."
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/TimeZonesGetResponse.json)}
+    - name: "ResendPasswordPostRequest"
+      description: "Model for resend password to a user"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/ResendPasswordPostRequest.json)}
+    - name: "ObjectDeleteResponse"
+      description: "Response received after deleting a new user"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/ObjectDeleteResponse.json)}
+    - name: "ErrorResponse"
+      description: "Model for the error response"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/ErrorResponse.json)}
+    - name: "PermissionDeniedResponse"
+      description: "Model for the permission denied response"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/PermissionDeniedResponse.json)}
+    - name: "ObjectCreationResponse"
+      description: "Response received after creating a new object"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/ObjectCreationResponse.json)}
+    - name: "ObjectEditionResponse"
+      description: "Response received after updating an object"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/ObjectEditionResponse.json)}
+    - name: "WebhooksGetResponse"
+      description: "Model for get webhook data response"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_events_backend/OpenAPI_Doc/Models/WebhooksGetResponse.json)}
+    - name: "WebhookLogsGetResponse"
+      description: "Model for get webhook log data response"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_events_backend/OpenAPI_Doc/Models/WebhookLogsGetResponse.json)}
+    - name: "AuditLogsGetResponse"
+      description: "Model for get audit log data response"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_events_backend/OpenAPI_Doc/Models/AuditLogsGetResponse.json)}
+    - name: "WebhooksPostRequest"
+      description: "Model for creating a new Webhook"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_events_backend/OpenAPI_Doc/Models/WebhooksPostRequest.json)}
+    - name: "WebhooksPutRequest"
+      description: "Model for updating a Webhook"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_events_backend/OpenAPI_Doc/Models/WebhooksPutRequest.json)}
+    - name: "WebhooksProcessRequest"
+      description: "Model for resend a webhook"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_events_backend/OpenAPI_Doc/Models/WebhooksProcessRequest.json)}
+    - name: "ObjectColumnsGetResponse"
+      description: "Model for get object columns response"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_events_backend/OpenAPI_Doc/Models/ObjectColumnsGetResponse.json)}

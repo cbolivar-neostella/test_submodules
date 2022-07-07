@@ -1,0 +1,30 @@
+{
+    "type":"object",
+    "properties": {
+        "count" : {
+            "type": "integer",
+            "description": "Number of records without the pagination"
+        },
+        "columns": {
+            "type": "array",
+            "description": "An array the data of columns of the table",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "table_name": {
+                        "type": "string",
+                        "description": "name of the table"
+                    },
+                    "data_type": {
+                        "type": "string",
+                        "description": "Data type of the column"
+                    },
+                    "column_name": {
+                        "type": "string",
+                        "description": "Name of the columns"
+                    }
+                }
+            }
+        }
+    }
+}
