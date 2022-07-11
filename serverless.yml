@@ -88,6 +88,11 @@ functions:
   - ${file(./src/neojumpstart_events_backend/Controllers/AuditController/serverless.yml):functions}
   - ${file(./src/neojumpstart_events_backend/init.yml):functions}
 
+  # Accounts
+  - ${file(./src/neojumpstart_accounts_backend/Controllers/AccountController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_accounts_backend/Controllers/CurrencyController/serverless.yml):functions}
+  - ${file(./src/neojumpstart_accounts_backend/init.yml):functions}
+
 resources:
   # neojumpstart_core_backend Resources
   - ${file(./src/neojumpstart_core_backend/init.yml):resources}

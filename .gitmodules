@@ -6,4 +6,7 @@
 	path = src/neojumpstart_core_backend
 	url = https://github.com/Neostella/neojumpstart_core_backend
 	branch = dev
-
+[submodule "src/neojumpstart_accounts_backend"]
+	path = src/neojumpstart_accounts_backend
+	url = https://github.com/Neostella/neojumpstart_accounts_backend
+	branch = dev
