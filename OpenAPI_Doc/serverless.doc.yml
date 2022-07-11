@@ -4,6 +4,7 @@ documentation:
     title: "Submodules API"
     description: "This is the API for the Submodules template"
   models:
+    # Users
     - name: "UsersPostRequest"
       description: "Model for creating a new user"
       contentType: "application/json"
@@ -52,26 +53,7 @@ documentation:
       description: "Model for resend password to a user"
       contentType: "application/json"
       schema: ${file(./src/neojumpstart_core_backend/OpenAPI_Doc/Models/ResendPasswordPostRequest.json)}
-    - name: "ObjectDeleteResponse"
-      description: "Response received after deleting a new user"
-      contentType: "application/json"
-      schema: ${file(./OpenAPI_Doc/Models/ObjectDeleteResponse.json)}
-    - name: "ErrorResponse"
-      description: "Model for the error response"
-      contentType: "application/json"
-      schema: ${file(./OpenAPI_Doc/Models/ErrorResponse.json)}
-    - name: "PermissionDeniedResponse"
-      description: "Model for the permission denied response"
-      contentType: "application/json"
-      schema: ${file(./OpenAPI_Doc/Models/PermissionDeniedResponse.json)}
-    - name: "ObjectCreationResponse"
-      description: "Response received after creating a new object"
-      contentType: "application/json"
-      schema: ${file(./OpenAPI_Doc/Models/ObjectCreationResponse.json)}
-    - name: "ObjectEditionResponse"
-      description: "Response received after updating an object"
-      contentType: "application/json"
-      schema: ${file(./OpenAPI_Doc/Models/ObjectEditionResponse.json)}
+    # Events
     - name: "WebhooksGetResponse"
       description: "Model for get webhook data response"
       contentType: "application/json"
@@ -100,3 +82,37 @@ documentation:
       description: "Model for get object columns response"
       contentType: "application/json"
       schema: ${file(./src/neojumpstart_events_backend/OpenAPI_Doc/Models/ObjectColumnsGetResponse.json)}
+    # Accounts
+    - name: "AccountsGetResponse"
+      description: "Model for get account data response."
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_accounts_backend/OpenAPI_Doc/Models/AccountsGetResponse.json)}
+    - name: "AccountsPostRequest"
+      description: "Model for creating a new account"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_accounts_backend/OpenAPI_Doc/Models/AccountsPostRequest.json)}
+    - name: "AccountsPutRequest"
+      description: "Model for updating an account"
+      contentType: "application/json"
+      schema: ${file(./src/neojumpstart_accounts_backend/OpenAPI_Doc/Models/AccountsPutRequest.json)}
+    # Objects
+    - name: "ObjectDeleteResponse"
+      description: "Response received after deleting a new user"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/ObjectDeleteResponse.json)}
+    - name: "ErrorResponse"
+      description: "Model for the error response"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/ErrorResponse.json)}
+    - name: "PermissionDeniedResponse"
+      description: "Model for the permission denied response"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/PermissionDeniedResponse.json)}
+    - name: "ObjectCreationResponse"
+      description: "Response received after creating a new object"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/ObjectCreationResponse.json)}
+    - name: "ObjectEditionResponse"
+      description: "Response received after updating an object"
+      contentType: "application/json"
+      schema: ${file(./OpenAPI_Doc/Models/ObjectEditionResponse.json)}
