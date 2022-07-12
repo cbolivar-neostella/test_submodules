@@ -1,12 +1,12 @@
 [submodule "src/neojumpstart_events_backend"]
 	path = src/neojumpstart_events_backend
 	url = https://github.com/Neostella/neojumpstart_events_backend
-	branch = dev
+	branch = main
 [submodule "src/neojumpstart_core_backend"]
 	path = src/neojumpstart_core_backend
 	url = https://github.com/Neostella/neojumpstart_core_backend
-	branch = dev
+	branch = main
 [submodule "src/neojumpstart_accounts_backend"]
 	path = src/neojumpstart_accounts_backend
 	url = https://github.com/Neostella/neojumpstart_accounts_backend
-	branch = dev
+	branch = main
